@@ -30,7 +30,7 @@ namespace SQLite_DB
 
             command = new SQLiteCommand(connection);
             sql = "CREATE TABLE IF NOT EXISTS Messages (" +
-                "'Id' integer primary key autoincrement, 'Message' text, 'DateIn' text, 'DateOut' text, 'SenderId' integer, 'RcptId' integer," +
+                "'Id' integer primary key autoincrement, 'Message' text, 'DateIn' text, 'DateOut' text DEFAULT null, 'SenderId' integer, 'RcptId' integer," +
                 " FOREIGN KEY(SenderId) REFERENCES Users(ID), FOREIGN KEY(RcptId) REFERENCES Users(ID) )";
             command.CommandText = sql;
             command.ExecuteNonQuery();
@@ -61,8 +61,9 @@ namespace SQLite_DB
 
         static string ReadMessage(int rcptId)
         {
+            int a = 0;
             StringBuilder stringBuilder = new StringBuilder();
-            command.CommandText = "SELECT Message FROM Messages WHERE RcptId = '" + rcptId + "' ";
+            command.CommandText = "SELECT Message FROM Messages WHERE DateOut = '" + a + "'";
             SQLiteDataReader reader = command.ExecuteReader();
 
             if (reader.HasRows)
@@ -76,8 +77,8 @@ namespace SQLite_DB
                 }
             }
             reader.Close();
-            command.CommandText = "UPDATE Messages Set DateOut = '" + DateTime.Now.ToString(@"dd\.hh\:mm\:ss") + "' WHERE  RcptId = '" + rcptId + "'";
-            command.ExecuteNonQuery();
+            //command.CommandText = "UPDATE Messages Set DateOut = '" + DateTime.Now.ToString(@"dd\.hh\:mm\:ss") + "' WHERE  RcptId = '" + rcptId + "'";
+            //command.ExecuteNonQuery();
             return stringBuilder.ToString();
         }
     }
